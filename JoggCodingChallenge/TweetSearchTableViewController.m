@@ -15,6 +15,7 @@
 
 @interface TweetSearchTableViewController ()
 @property NSArray* statusArray;
+@property UIView* activityIndicatorOverlay;
 @end
 
 @implementation TweetSearchTableViewController
@@ -24,6 +25,16 @@
     
     //Get rid of line break in separator
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+    
+    //Set up overlay
+    self.activityIndicatorOverlay = [[UIView alloc] initWithFrame:self.view.frame];
+    self.activityIndicatorOverlay.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0.5 alpha:0.25];
+    
+    //Set up activity indicator
+    UIActivityIndicatorView* activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [activityIndicator startAnimating];
+    activityIndicator.center = self.activityIndicatorOverlay.center;
+    [self.activityIndicatorOverlay addSubview:activityIndicator];
 }
 
 - (BOOL) prefersStatusBarHidden {
@@ -44,6 +55,21 @@
         cell = [[UITableViewCell alloc] init];
         cell.textLabel.numberOfLines = 0;
         cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
+
+        // Remove seperator inset
+        if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+            [cell setSeparatorInset:UIEdgeInsetsZero];
+        }
+        
+        // Prevent the cell from inheriting the Table View's margin settings
+        if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
+            [cell setPreservesSuperviewLayoutMargins:NO];
+        }
+        
+        // Explictly set your cell's layout margins
+        if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+            [cell setLayoutMargins:UIEdgeInsetsZero];
+        }
     }
     
     NSDictionary* status = [self.statusArray objectAtIndex:indexPath.row];
@@ -57,10 +83,27 @@
 
 #pragma mark - UISearchBarDelegate
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    DebugLogWhereAmI();
+    DebugLog(@"Text = [%@]", searchBar.text);
+    
     [searchBar resignFirstResponder];
     [self performSearchWithSearchString:searchBar.text];
+    [self showSpinner];
 }
+
+- (void) showSpinner {
+    DebugLogWhereAmI();
+    [self.view addSubview:self.activityIndicatorOverlay];
+    self.tableView.scrollEnabled = NO;
+    self.tableView.userInteractionEnabled = NO;
+}
+
+- (void) hideSpinner {
+    DebugLogWhereAmI();
+    [self.activityIndicatorOverlay removeFromSuperview];
+    self.tableView.scrollEnabled = YES;
+    self.tableView.userInteractionEnabled = YES;
+}
+
 
 #pragma mark - AlertViews
 - (void) presentStatusAppAlertViewWithTitle:(NSString*) title andMessage:(NSString*)message {
@@ -133,9 +176,14 @@
                 DebugLog(@"error = [%@]", error);
                 //TODO: "Could not connect to Twitter" alertView
             } else {
-                NSDictionary* jsonDict = (NSDictionary*)[NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:&error];
-                self.statusArray = [jsonDict objectForKey:@"statuses"];
-                [self.tableView reloadData];                    
+                dispatch_async(dispatch_get_main_queue(), ^(void){
+                    NSDictionary* jsonDict = (NSDictionary*)[NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:nil];
+                    self.statusArray = [jsonDict objectForKey:@"statuses"];
+                    [self.tableView reloadData];
+                    
+                    DebugLog(@"HideSpinner");
+                    [self hideSpinner];
+                });
             }
         }];
     }];
