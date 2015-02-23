@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TweetSearchTableViewController : UITableViewController <UIAlertViewDelegate>
+@interface TweetSearchTableViewController : UITableViewController <UIAlertViewDelegate, UISearchBarDelegate>
 
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
 @end
 

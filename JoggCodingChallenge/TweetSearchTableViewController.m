@@ -21,11 +21,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-}
-
-
-- (void) viewDidAppear:(BOOL)animated {
-    [self performSearchWithSearchString:@"Test"];
+    
+    //Get rid of line break in separator
+    [self.tableView setSeparatorInset:UIEdgeInsetsZero];
 }
 
 - (BOOL) prefersStatusBarHidden {
@@ -44,14 +42,24 @@
     
     if (!cell) {
         cell = [[UITableViewCell alloc] init];
+        cell.textLabel.numberOfLines = 0;
+        cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
     }
     
     NSDictionary* status = [self.statusArray objectAtIndex:indexPath.row];
-    //User's icon is at user->profile_image_url
+    //TODO: Get user's icon at user->profile_image_url
     
+    //Set the label
     cell.textLabel.text = status[@"text"];
     
     return cell;
+}
+
+#pragma mark - UISearchBarDelegate
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    DebugLogWhereAmI();
+    [searchBar resignFirstResponder];
+    [self performSearchWithSearchString:searchBar.text];
 }
 
 #pragma mark - AlertViews
