@@ -1,0 +1,30 @@
+//
+//  PrefixHeader.pch
+//  JoggCodingChallenge
+//
+//  Created by Scott McCoy on 2/22/15.
+//  Copyright (c) 2015 ScottSoft. All rights reserved.
+//
+
+#ifndef JoggCodingChallenge_PrefixHeader_pch
+#define JoggCodingChallenge_PrefixHeader_pch
+
+//Turns DebugLog on and off
+
+//Note: This is an old favorite of mine. On apps that don't have or don't need really robust
+//logging systems, this little macro saves a lot of time hunting down where things are happening
+//by automatically logging the class, method, and line number where the macro was called from.
+#define DEBUG_LOG_ON
+
+#ifdef DEBUG_LOG_ON
+    //Define the DebugLog macro
+    #define DebugLog( s, ... ) NSLog( @"%s(%d)  %@",__PRETTY_FUNCTION__, __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
+    //Define DebugLogWhereAmI which just NSLogs __PRETTY_FUNCTION__ and __LINE__
+    #define DebugLogWhereAmI() DebugLog(@"")
+#else
+    //Define both macros as emptystring so they don't do anything
+    #define DebugLog( s, ... )
+    #define DebugLogWhereAmI()
+#endif
+
+#endif

@@ -40,6 +40,7 @@
 		6CBA3E8B1A9AB35B00BCC3AC /* JoggCodingChallengeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JoggCodingChallengeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CBA3E901A9AB35B00BCC3AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6CBA3E911A9AB35B00BCC3AC /* JoggCodingChallengeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JoggCodingChallengeTests.m; sourceTree = "<group>"; };
+		6CBA3E9C1A9AB4B200BCC3AC /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +82,7 @@
 		6CBA3E741A9AB35B00BCC3AC /* JoggCodingChallenge */ = {
 			isa = PBXGroup;
 			children = (
+				6CBA3E9C1A9AB4B200BCC3AC /* PrefixHeader.pch */,
 				6CBA3E791A9AB35B00BCC3AC /* AppDelegate.h */,
 				6CBA3E7A1A9AB35B00BCC3AC /* AppDelegate.m */,
 				6CBA3E7C1A9AB35B00BCC3AC /* ViewController.h */,
@@ -345,6 +347,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = JoggCodingChallenge/PrefixHeader.pch;
 				INFOPLIST_FILE = JoggCodingChallenge/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -355,6 +359,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = JoggCodingChallenge/PrefixHeader.pch;
 				INFOPLIST_FILE = JoggCodingChallenge/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
